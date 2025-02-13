@@ -40,13 +40,17 @@ while True:
         print("⚠️ 格式錯誤，請輸入正確的 YYYYMMDD！")
         continue
 
-    item = input("請輸入項目名稱: (if salary of genibuilder, please enter 1; if bonus, enter 2)")
-    if item == "1":
+    item = input("請輸入項目名稱: (if salary of genibuilder, please enter 1; if bonus, enter 2; q to quit)")
+    if item.lower() == 'q':
+        break
+    elif item == "1":
         item = "Genibuilder 薪水"
         is_salary = True
     elif item == "2":
         item = "Genibuilder 獎金"
         is_salary = True
+    else:
+        is_salary = False
 
     amount = float(input("請輸入金額: "))
 
