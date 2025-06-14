@@ -1,6 +1,7 @@
-from tools.get_usd import get_usd_to_twd_rate
-
 import pandas as pd
+from rich import print
+
+from tools.get_usd import get_usd_to_twd_rate
 
 # **讀取 finance.txt**
 finance_file = "./data/finance.txt"
@@ -31,16 +32,20 @@ while True:
     print(df.tail(10))
 
     raw_date = input("請輸入日期 (格式: YYYYMMDD，例如 20250120，輸入 q 退出): ")
+    year = raw_date[:4]
+    month = raw_date[4:6]
+    day = raw_date[6:]
     if raw_date.lower() == 'q':
         break
 
     try:
-        formatted_date = f"{raw_date[:4]}/{int(raw_date[4:6])}/{int(raw_date[6:])}"
+        formatted_date = f"{year}/{month}/{day}"
     except (ValueError, IndexError):
         print("⚠️ 格式錯誤，請輸入正確的 YYYYMMDD！")
         continue
 
-    item = input("請輸入項目名稱: (if salary of genibuilder, please enter 1; if bonus, enter 2; q to quit)")
+    is_salary = False
+    item = input("請輸入項目名稱: (Salary: 1; Bonus: 2; 固定支出: 3; 生活費: 4; q to quit)")
     if item.lower() == 'q':
         break
     elif item == "1":
@@ -49,10 +54,19 @@ while True:
     elif item == "2":
         item = "Genibuilder 獎金"
         is_salary = True
+    elif item == "3":
+        item = f"{month}月固定支出"
+    elif item == "4":
+        item = f"{month}月生活費"
     else:
         is_salary = False
 
-    amount = float(input("請輸入金額: "))
+    if item == f"{month}月固定支出":
+        # amount = 20668
+        # fixed amount from 25/04
+        amount = 25138
+    else:
+        amount = float(input("請輸入金額: "))
 
     try:
         amount = int(amount)

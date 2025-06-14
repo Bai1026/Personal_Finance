@@ -1,5 +1,7 @@
 import argparse
+
 import pandas as pd
+from rich import print
 
 
 def count_salary():
@@ -10,9 +12,25 @@ def count_salary():
 
     genibuilder_salary = df[df["item"] == "Genibuilder 薪水"]
     total_salary = genibuilder_salary["amount"].sum()
+    
+    # also check for "Genibuilder 獎金"
+    genibuilder_bonus = df[df["item"] == "Genibuilder 獎金"]
+    total_bonus = genibuilder_bonus["amount"].sum()
+    total_salary += total_bonus
 
-    print(f"💰 Genibuilder 薪水總金額: {total_salary}")
-
+    # also 內推獎金
+    referral_bonus = df[df["item"] == "Genibuilder 內推獎金"]
+    total_referral_bonus = referral_bonus["amount"].sum()
+    total_salary += total_referral_bonus
+    
+    # print(f"💰 Genibuilder 薪水總金額: {total_salary}")
+    # print(f"💰 Genibuilder 獎金總金額: {total_bonus}"
+    # print all of the salary and bonus records
+    print("\n📊 薪水和獎金記錄:"
+          f"\n{genibuilder_salary.to_string(index=False)}"
+          f"\n{genibuilder_bonus.to_string(index=False)}"
+          f"\n{referral_bonus.to_string(index=False)}")
+    print(f"\n💰 總金額: {total_salary}")
 
 def count_amount_after_date():
     type = input("請輸入類別 (1 for income / 2 for expenditure): ")
@@ -60,4 +78,6 @@ if __name__ == '__main__':
     if args.action == "salary":
         count_salary()
     elif args.action == "amount":
+        count_amount_after_date()
+    else:
         count_amount_after_date()
