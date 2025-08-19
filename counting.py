@@ -23,14 +23,51 @@ def count_salary():
     total_referral_bonus = referral_bonus["amount"].sum()
     total_salary += total_referral_bonus
     
+    # 家教收入
+    tutoring_income = df[df["item"].str.startswith("家教", na=False)]
+    total_tutoring = tutoring_income["amount"].sum()
+    total_salary += total_tutoring
+    
     # print(f"💰 Genibuilder 薪水總金額: {total_salary}")
     # print(f"💰 Genibuilder 獎金總金額: {total_bonus}"
     # print all of the salary and bonus records
     print("\n📊 薪水和獎金記錄:"
           f"\n{genibuilder_salary.to_string(index=False)}"
           f"\n{genibuilder_bonus.to_string(index=False)}"
-          f"\n{referral_bonus.to_string(index=False)}")
+          f"\n{referral_bonus.to_string(index=False)}"
+          f"\n{tutoring_income.to_string(index=False)}")
     print(f"\n💰 總金額: {total_salary}")
+
+def count_by_category():
+    csv_file = "./output/income.csv"
+    df = pd.read_csv(csv_file)
+
+    df = df[df["date"] != "總計"]
+
+    print("請選擇類別：")
+    print("1. Genibuilder開頭")
+    print("2. 家教開頭")
+    
+    choice = input("請輸入選擇 (1 or 2): ")
+    
+    if choice == "1":
+        category_df = df[df["item"].str.startswith("Genibuilder", na=False)]
+        category_name = "Genibuilder"
+    elif choice == "2":
+        category_df = df[df["item"].str.startswith("家教", na=False)]
+        category_name = "家教"
+    else:
+        print("⚠️ 無效的選擇！")
+        return
+    
+    total_amount = category_df["amount"].sum()
+    
+    print(f"\n📊 {category_name} 類別記錄:")
+    if category_df.empty:
+        print("⚠️ 沒有符合條件的項目！")
+    else:
+        print(category_df.to_string(index=False))
+        print(f"\n💰 {category_name} 總金額: {total_amount}")
 
 def count_amount_after_date():
     type = input("請輸入類別 (1 for income / 2 for expenditure): ")
@@ -71,13 +108,14 @@ def count_amount_after_date():
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Calculate salary and amount after a specific date.")
-    parser.add_argument("-a", "--action", choices=["salary", "amount"], help="Choose the action to perform.")
+    print('請選擇要執行的動作：s=薪水, a=指定日期後金額, c=類別總數')
+    parser = argparse.ArgumentParser(description="計算薪水、指定日期後的金額或類別總數。")
+    parser.add_argument("action", choices=["s", "a", "c"], help="請選擇要執行的動作：s=薪水, a=指定日期後金額, c=類別總數")
     args = parser.parse_args()
 
-    if args.action == "salary":
+    if args.action == "s":
         count_salary()
-    elif args.action == "amount":
+    elif args.action == "a":
         count_amount_after_date()
-    else:
-        count_amount_after_date()
+    elif args.action == "c":
+        count_by_category()

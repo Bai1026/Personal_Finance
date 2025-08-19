@@ -45,7 +45,7 @@ while True:
         continue
 
     is_salary = False
-    item = input("請輸入項目名稱: (Salary: 1; Bonus: 2; 固定支出: 3; 生活費: 4; q to quit)")
+    item = input("請輸入項目名稱: (Salary: 1; Bonus: 2; 固定支出: 3; 生活費: 4; 家教: 5; q to quit)")
     if item.lower() == 'q':
         break
     elif item == "1":
@@ -58,6 +58,9 @@ while True:
         item = f"{month}月固定支出"
     elif item == "4":
         item = f"{month}月生活費"
+    elif item == "5":
+        hours = input("請輸入家教小時數: ")
+        item = f"家教 {hours} 小時"
     else:
         is_salary = False
 
