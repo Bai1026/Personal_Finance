@@ -108,14 +108,15 @@ def count_amount_after_date():
 
 
 if __name__ == '__main__':
-    print('請選擇要執行的動作：s=薪水, a=指定日期後金額, c=類別總數')
-    parser = argparse.ArgumentParser(description="計算薪水、指定日期後的金額或類別總數。")
-    parser.add_argument("action", choices=["s", "a", "c"], help="請選擇要執行的動作：s=薪水, a=指定日期後金額, c=類別總數")
-    args = parser.parse_args()
+    # print('請選擇要執行的動作：s=薪水, a=指定日期後金額, c=類別總數')
+    # parser = argparse.ArgumentParser(description="計算薪水、指定日期後的金額或類別總數。")
+    # parser.add_argument("action", choices=["s", "a", "c"], help="請選擇要執行的動作：s=薪水, a=指定日期後金額, c=類別總數")
+    # args = parser.parse_args()
 
-    if args.action == "s":
+    action = input('請輸入要執行的動作 (s=薪水, a=指定日期後金額, c=類別總數): ').strip().lower()
+    if action == "s":
         count_salary()
-    elif args.action == "a":
+    elif action == "a":
         count_amount_after_date()
-    elif args.action == "c":
+    elif action == "c":
         count_by_category()

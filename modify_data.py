@@ -35,6 +35,30 @@ except (ValueError, IndexError):
 # 顯示選定的項目
 print(f"\n🔹 你選擇了: {selected_row.date} - {selected_row.item} - {selected_row.amount}")
 
+# **是否刪除項目**
+delete_item = input("是否刪除此項目？(y/n): ").strip().lower()
+if delete_item == "y":
+    confirm_delete = input(f"⚠️ 確定要刪除 '{selected_row.item}' 嗎？此操作無法復原！(y/n): ").strip().lower()
+    if confirm_delete == "y":
+        # 刪除選定的項目
+        df = df.drop(df.index[choice - 1])
+        df = df.reset_index(drop=True)
+        
+        # 重新計算總計
+        df = df[df["date"] != "總計"]
+        total_amount = df["amount"].sum()
+        df.loc[len(df)] = ["總計", "", total_amount]
+        
+        # 存回 CSV
+        df.to_csv(csv_file, index=False)
+        
+        print(f"✅ 項目 '{selected_row.item}' 已成功刪除！")
+        print(f"✅ 總計已更新為 {total_amount}！")
+        print(f"📁 {csv_file} 已更新！")
+        exit()
+    else:
+        print("❌ 取消刪除")
+
 # **是否修改日期**
 change_date = input("是否修改日期？(y/n): ").strip().lower()
 if change_date == "y":
